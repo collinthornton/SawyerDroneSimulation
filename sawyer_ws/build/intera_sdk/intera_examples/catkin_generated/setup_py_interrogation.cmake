@@ -1,0 +1,6 @@
+set(intera_examples_SETUP_PY_VERSION "5.3.0")
+set(intera_examples_SETUP_PY_SCRIPTS "")
+set(intera_examples_SETUP_PY_PACKAGES "intera_examples;intera_external_devices")
+set(intera_examples_SETUP_PY_PACKAGE_DIRS "src/intera_examples;src/intera_external_devices")
+set(intera_examples_SETUP_PY_MODULES "")
+set(intera_examples_SETUP_PY_MODULE_DIRS "")

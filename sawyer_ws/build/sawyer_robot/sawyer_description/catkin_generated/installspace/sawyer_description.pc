@@ -1,0 +1,8 @@
+prefix=/home/cthornton/sawyer_ws/install
+
+Name: sawyer_description
+Description: Description of sawyer_description
+Version: 5.3.0
+Cflags: 
+Libs: -L/home/cthornton/sawyer_ws/install/lib 
+Requires: 
