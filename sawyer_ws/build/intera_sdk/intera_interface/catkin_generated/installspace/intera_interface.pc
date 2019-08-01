@@ -1,8 +1,0 @@
-prefix=/home/cthornton/sawyer_ws/install
-
-Name: intera_interface
-Description: Description of intera_interface
-Version: 5.3.0
-Cflags: -I/home/cthornton/sawyer_ws/install/include
-Libs: -L/home/cthornton/sawyer_ws/install/lib 
-Requires: cv_bridge rospy actionlib sensor_msgs std_msgs control_msgs trajectory_msgs dynamic_reconfigure intera_core_msgs intera_motion_msgs

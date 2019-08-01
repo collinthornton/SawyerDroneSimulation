@@ -1,8 +1,0 @@
-prefix=/home/cthornton/sawyer_ws/devel
-
-Name: intera_core_msgs
-Description: Description of intera_core_msgs
-Version: 5.3.0
-Cflags: -I/home/cthornton/sawyer_ws/devel/include
-Libs: -L/home/cthornton/sawyer_ws/devel/lib 
-Requires: message_runtime std_msgs geometry_msgs sensor_msgs actionlib_msgs

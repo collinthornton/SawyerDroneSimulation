@@ -1,8 +1,0 @@
-prefix=/home/cthornton/sawyer_ws/install
-
-Name: intera_motion_msgs
-Description: Description of intera_motion_msgs
-Version: 5.3.0
-Cflags: -I/home/cthornton/sawyer_ws/install/include
-Libs: -L/home/cthornton/sawyer_ws/install/lib 
-Requires: message_runtime std_msgs geometry_msgs intera_core_msgs actionlib_msgs
