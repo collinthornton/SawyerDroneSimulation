@@ -13,44 +13,16 @@ from intera_motion_interface import (
 	MotionWaypointOptions
 )
 
-from Kinematics import Kinematics
+from InputData import InputData
 
 RATE = 100 #hz
 ACCESS_ROBOT = True
-
-
-# BASIC PID ALGORITHM
-class PID:
-    def __init__(self, kP, kI, kD, MAX, MIN):
-        self.kP = kP
-        self.kI = kI
-        self.kD = kD
-        self.MAX = MAX
-        self.MIN = MIN
-
-        self.dt = 1/RATE
-        self.integratedE = 0
-        self.pastError   = 0
-
-    def compute(self, actual, desired):
-        error = actual - desired
-
-        self.integratedE += error*self.dt
-
-        P = error * self.kP
-        I = self.integratedE
-        D = (error - self.pastError) / self.dt
-
-        self.prevError = error
-        return (P*self.kP + I*self.kI + D*self.kD)
-
 
 
 # CLASS TO SIMULATE DRONE MOTION ON THE SAWYER ROBOTIC ARM
 class Drone:
     def __init__(self):
         print("Getting robot state... ")
-        k = Kinematics()
         if ACCESS_ROBOT:
             self.rs = RobotEnable(CHECK_VERSION)
             self.rs.enable()
@@ -84,7 +56,7 @@ class Drone:
         print('')
         print('')
 
-        raw_input(" ----- ROBOT ENABLED, PLEASE PRESS 'ENTER' TO CONTINUE ----- ")
+        input(" ----- ROBOT ENABLED, PLEASE PRESS 'ENTER' TO CONTINUE ----- ")
 
 
 
