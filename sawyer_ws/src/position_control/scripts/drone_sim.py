@@ -56,7 +56,12 @@ class Drone:
         print('')
         print('')
 
-        input(" ----- ROBOT ENABLED, PLEASE PRESS 'ENTER' TO CONTINUE ----- ")
+        self.parser = InputData()
+        self.input_traj()
+        try:
+            input(" ----- ROBOT ENABLED, PLEASE PRESS 'ENTER' TO CONTINUE ----- ")
+        except Exception:
+            print("")
 
 
 
@@ -73,21 +78,35 @@ class Drone:
 
         return
 
+    def input_traj(self):
+        M = self.parser.inputMatrix()
+
+        point_list = list()
+        i = 0
+        for waypoint in M:
+            point = [ waypoint[2][0],waypoint[2][1],-waypoint[2][2],waypoint[3][0],waypoint[3][1],waypoint[3][2] ]
+            point_list.append(point)
+
+            if i > 50: 
+                break
+            else:
+                i += 1
+
     # CONTAINS WAYPOINTS TO TRACE BOX AT START OF PROGRAM
     def trace_box(self):
         print("I am tracing a box")
 
         point_list = list()
-        point = [0.65, 0.25, 0.5, 0.0, 0.0, 0.0]
+        point = [0.0, 0.25, 0.0, 0.0, 0.0, 0.0]
         point_list.append(point)
         
-        point = [0.65, -0.25, 0.5, 0.0, 0.0, 0.0]
+        point = [0.0, -0.25, 0.0, 0.0, 0.0, 0.0]
         point_list.append(point)
 
-        point = [0.65, 0.0, 0.75, 0.0, 0.0, 0.0]
+        point = [0.0, 0.0, 0.25, 0.0, 0.0, 0.0]
         point_list.append(point)
 
-        point = [0.65, 0.0, 0.25, 0.0, 0.0, 0.0]
+        point = [0.65, 0.0, -0.25, 0.0, 0.0, 0.0]
         point_list.append(point)
 
         success = self.move(wait=True, point_list=point_list)
@@ -95,7 +114,7 @@ class Drone:
 
     def moveToNeutral(self):
         print("\n --- Returning to neutral position (0.65, 0.0, 0.5, 0.0, 0.0, 0.0 ---")
-        point = [0.65, 0.0, 0.5, 0.0, 0.0, 0.0]
+        point = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         point_list = [point]
 
         success = self.move(wait=True, point_list=point_list)
@@ -125,9 +144,9 @@ class Drone:
 
             newPose = PoseStamped()
             newPose.header = Header(stamp=rospy.Time.now(), frame_id='base')
-            newPose.pose.position.x = point[0]
-            newPose.pose.position.y = point[1]
-            newPose.pose.position.z = point[2]
+            newPose.pose.position.x = point[0] + 0.65
+            newPose.pose.position.y = point[1] + 0.0
+            newPose.pose.position.z = point[2] + 0.5
             newPose.pose.orientation.x = q[0]
             newPose.pose.orientation.y = q[1]
             newPose.pose.orientation.z = q[2]
