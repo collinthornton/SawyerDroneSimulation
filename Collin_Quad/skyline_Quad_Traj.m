@@ -10,7 +10,7 @@ wind = [2 -1 0];
 maxVel = [8, 8];
 
 % sigma = 0*[1.06 1.06 0.7];
- sigma = 1*[1.06 1.06 0];
+ sigma = 1.0*[1.06 1.06 0];
 
 wind_and_Max_Vel = abs([0, crosswind, maxVel]);
 
@@ -71,4 +71,4 @@ keras_data = [ytot(1:100:end,4:6), acceleration.Data(5001:100:end,4:6) ...
 
 % dlmwrite('Quad_Data_With_Euler_NorthEast_5ksec.txt', keras_data, ',')
 
-dlmwrite('Quad_Data_Hover_Crosswinds.txt', keras_data, 'delimiter', '\t', 'precision', 2)
+dlmwrite('Quad_Data_Hover_Crosswinds.txt', keras_data, 'delimiter', ',', 'precision', 2)

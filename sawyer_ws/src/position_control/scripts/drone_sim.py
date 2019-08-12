@@ -5,12 +5,17 @@ from copy import copy
 from geometry_msgs.msg import PoseStamped
 from tf.transformations import quaternion_from_euler, euler_from_quaternion, quaternion_multiply
 from std_msgs.msg import Header
+
 from intera_interface import CHECK_VERSION, Limb, Lights, RobotEnable
 from intera_motion_msgs.msg import TrajectoryOptions
 from intera_motion_interface import (
 	MotionTrajectory,
 	MotionWaypoint,
 	MotionWaypointOptions
+)
+from intera_core_msgs.srv import (
+    SolvePositionIK,
+    SolvePositionIKRequest,
 )
 
 from InputData import InputData
@@ -57,7 +62,6 @@ class Drone:
         print('')
 
         self.parser = InputData()
-        self.input_traj()
         try:
             input(" ----- ROBOT ENABLED, PLEASE PRESS 'ENTER' TO CONTINUE ----- ")
         except Exception:
@@ -78,19 +82,23 @@ class Drone:
 
         return
 
-    def input_traj(self):
+    def sim_drone(self):
         M = self.parser.inputMatrix()
 
         point_list = list()
         i = 0
         for waypoint in M:
-            point = [ waypoint[2][0],waypoint[2][1],-waypoint[2][2],waypoint[3][0],waypoint[3][1],waypoint[3][2] ]
+            #point = [ waypoint[2][0],-waypoint[2][1],-waypoint[2][2],waypoint[3][0],waypoint[3][1],waypoint[3][2] ]
+            point = [ waypoint[2][0],-waypoint[2][1],-waypoint[2][2],0,0,0 ]
             point_list.append(point)
 
-            if i > 50: 
+            print(point)
+            if i > 150:         # Each point represent 0.1 seconds of flight time in simulator
                 break
             else:
                 i += 1
+
+        self.move(wait=True, point_list=point_list, MAX_LIN_ACCL=2.5)
 
     # CONTAINS WAYPOINTS TO TRACE BOX AT START OF PROGRAM
     def trace_box(self):
@@ -100,16 +108,22 @@ class Drone:
         point = [0.0, 0.25, 0.0, 0.0, 0.0, 0.0]
         point_list.append(point)
         
-        point = [0.0, -0.25, 0.0, 0.0, 0.0, 0.0]
+        point = [0.0, 0.25, 0.1, 0.0, 0.0, 0.0]
         point_list.append(point)
 
-        point = [0.0, 0.0, 0.25, 0.0, 0.0, 0.0]
+        point = [0.0, -0.25, 0.1, 0.0, 0.0, 0.0]
         point_list.append(point)
 
-        point = [0.65, 0.0, -0.25, 0.0, 0.0, 0.0]
+        point = [0.0, -0.25, -0.1, 0.0, 0.0, 0.0]
         point_list.append(point)
 
-        success = self.move(wait=True, point_list=point_list)
+        point = [0.0, 0.25, -0.1, 0.0, 0.0, 0.0]
+        point_list.append(point)
+
+        point = [0.0, 0.25, 0.0, 0.0, 0.0, 0.0]
+        point_list.append(point)
+
+        success = self.move(wait=True, point_list=point_list, MAX_LIN_SPD=0.5, MAX_LIN_ACCL=0.75)
         return success
 
     def moveToNeutral(self):
@@ -117,9 +131,11 @@ class Drone:
         point = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         point_list = [point]
 
-        success = self.move(wait=True, point_list=point_list)
+        success = self.move(wait=True, point_list=point_list, MAX_LIN_SPD=0.5, MAX_LIN_ACCL=0.75)
         return success
 
+
+    # NEED TO TO SWITCH JOINT CONTROL MODE TO JOINT AND USE AN IK SOLVER TO INTERPOLATE JOINT POSITIONS
 
     # FUNCTION TO ABSTRACT CONTORL OF ARM
     def move(self, point_list, wait = True, MAX_LIN_SPD=7.0, MAX_LIN_ACCL=1.5):  # one point = [x_coord, y_coord, z_coord, x_deg, y_deg, z_deg]     
@@ -135,18 +151,19 @@ class Drone:
             traj.stop_trajectory()
             return True
 
-        wpt_opts = MotionWaypointOptions(max_linear_speed=MAX_LIN_SPD, max_linear_accel=MAX_LIN_ACCL, corner_distance=0.05)
+        wpt_opts = MotionWaypointOptions(max_linear_speed=MAX_LIN_SPD, max_linear_accel=MAX_LIN_ACCL, corner_distance=0.002)
         
         for point in point_list:
             q_base = quaternion_from_euler(0, math.pi/2, 0)
-            q_rot = quaternion_from_euler(math.radians(point[3]), math.radians(point[4]), math.radians(point[5]))
+            #q_rot = quaternion_from_euler(math.radians(point[3]), math.radians(point[4]), math.radians(point[5]))
+            q_rot = quaternion_from_euler(point[3], point[4], point[5])
             q = quaternion_multiply(q_rot, q_base)
 
             newPose = PoseStamped()
             newPose.header = Header(stamp=rospy.Time.now(), frame_id='base')
             newPose.pose.position.x = point[0] + 0.65
             newPose.pose.position.y = point[1] + 0.0
-            newPose.pose.position.z = point[2] + 0.5
+            newPose.pose.position.z = point[2] + 0.4
             newPose.pose.orientation.x = q[0]
             newPose.pose.orientation.y = q[1]
             newPose.pose.orientation.z = q[2]
@@ -186,11 +203,12 @@ class Drone:
             self.trace_box()
             self.moveToNeutral()
 
-        self.move(wait=True, point_list=[[0.65, 0.0, 0.5, 45, 0, 0], [0.65, 0.5, 0.5, 45, 0, 0], [0.65, 0.5, 0.5, 0.0, 0.0, 0.0]])
+        #self.sim_drone()
+        self.move(wait=True, point_list=[[-0.011,0.046,0.015,-0.53,0.023,-6.5e06],[-0.012, 0.04, 0.014, -0.53, 0.022, -6.2e-06], [0.0, 0.0, 0.0, 0, 0, 0]])
 
-        rate = rospy.Rate(RATE)
-        while not rospy.is_shutdown():
-            rate.sleep()
+        #rate = rospy.Rate(RATE)
+        #while not rospy.is_shutdown():
+        #    rate.sleep()
 
         return
 

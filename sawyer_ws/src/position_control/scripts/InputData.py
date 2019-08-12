@@ -2,7 +2,7 @@
 
 class InputData:
     def __init__(self):
-        self.f = open("/home/cthornton/git/SawyerDroneSimulation/Collin_Quad/Trials/Trial_One/Trial_One.txt", "r")
+        self.f = open("/home/cthornton/git/SawyerDroneSimulation/Collin_Quad/Trials/TrialTwoSigma0.5/Quad_Data_Hover_Crosswinds.txt", "r")
 
     def inputMatrix(self):
         path = []
@@ -16,6 +16,7 @@ class InputData:
             accel = [0,0,0]
             pos = [0,0,0]
             rpy = [0,0,0]
+            rpy_rates = [0,0,0]
             
             for i in range(0,3):
                 index = line.find(",", prevIndex)
@@ -39,7 +40,13 @@ class InputData:
                 index = line.find(",", prevIndex)
                 rpy[i] = float(line[prevIndex:index])
                 prevIndex = index+1
-
+            
+            i=0
+            for i in range(0,3):
+                index = line.find(",", prevIndex)
+                rpy_rates[i] = float(line[prevIndex:index])
+                prevIndex = index+1
+            
             state = [vel, accel, pos, rpy]
             path.append(state)
 
