@@ -137,7 +137,7 @@ class MotionWaypoint(object):
             active_endpoint = MotionWaypoint.get_default_active_endpoint()
 
         pose = PoseStamped()
-        # If joint angles don't exist or we don't want to computer FK:
+        # If joint angles don't exist or we don't want to compute FK:
         if not perform_fk or not joint_angles:
             self._data.pose = pose   # empty pose as well
         else:   # Solve forward kinematics to get the pose

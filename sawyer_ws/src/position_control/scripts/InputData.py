@@ -47,7 +47,10 @@ class InputData:
                 rpy_rates[i] = float(line[prevIndex:index])
                 prevIndex = index+1
             
-            state = [vel, accel, pos, rpy]
+            state = [vel, accel, pos, rpy, rpy_rates]
+            
+            #print(state)
+            #input("hi")
             path.append(state)
 
         self.f.close()
