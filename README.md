@@ -12,8 +12,7 @@ This project is being developed for a multidisciplinary research project at Okla
 *__5.__*  -  sawyer_ws/src/position_control/scripts/drone_sim_joints.py
 
 ### Intera Inverse Kinematics Solver
-The SDK maintains a rosservice for solving inverse kinematics problems. It is exemplified in:
-
+The SDK maintains a rosservice for solving inverse kinematics problems. It is exemplified in: \
 sawyer_ws/src/intera_sdk/intera_examples/scripts/ik_service_client.py 
 
 Their example code is decently documented and works as a general guide. Further examples can be found in __1.__ and __5.__
