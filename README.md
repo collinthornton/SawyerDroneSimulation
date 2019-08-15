@@ -22,5 +22,5 @@ Their example code is decently documented and works as a general guide. Further 
 The Intera SDK contains multiple methods of controlling the arm.
 \
 #### Motion Controller
-The Motion Controller Interface is a simplified method of giving the arm specific waypoints. It hfas two interpolation settings: CARTESIAN and JOINT. Both serve different purposes and must be implemented in different ways. 
+The Motion Controller Interface is a simplified method of giving the arm specific waypoints. It hfas two interpolation settings: CARTESIAN and JOINT. Both serve different purposes and must be implemented in different ways. \ 
 __CARTESIAN -__ This mode tracks linearly from point to point. It is useful
