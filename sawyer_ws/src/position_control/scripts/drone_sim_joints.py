@@ -166,7 +166,8 @@ class Drone:
             traj.append_waypoint(waypoint.to_msg())
 
             for point in point_list:
-                q_base = quaternion_from_euler(0, math.pi/2, 0)
+                #q_base = quaternion_from_euler(0, math.pi/2, 0)
+                q_base = quaternion_from_euler(0, 0, 0)
                 #q_rot = quaternion_from_euler(math.radians(point[3]), math.radians(point[4]), math.radians(point[5]))      # USE THIS IF ANGLES ARE IN DEGREES
                 q_rot = quaternion_from_euler(point[3], point[4], point[5])                                                 # USE THIS IF ANGLES ARE IN RADIANS
                 q = quaternion_multiply(q_rot, q_base)

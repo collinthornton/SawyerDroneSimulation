@@ -1,0 +1,67 @@
+\documentclass[letterpaper,11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage[defaultlines=4,all]{nowidow}
+\usepackage{float}
+\usepackage[headheight=27pt,margin=1in]{geometry}
+\usepackage{parskip}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{ctable}
+\usepackage{csquotes}
+\usepackage{fancyhdr}
+\usepackage{siunitx} \sisetup{detect-all} %Use with ss fonts
+\usepackage[colorlinks, allcolors=black, urlcolor=blue]{hyperref}
+\usepackage{verbatim}
+ 
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+ 
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\begin{document}
+
+\noindent
+
+\begin{center}
+\huge \textbf{SawyerDroneSimulation} \\
+\end{center}
+
+\normalsize This project is  being developed for a multidisciplinary research project at Oklahoma State University. This code simulates a quadcopter drone on a Sawyer Robotic Arm and demonstrates the use of various motion interfaces of the arm. 
+
+\tableofcontents
+
+\section{Files of Interest}
+\begin{itemize}
+	\item \begin{verbatim}../sawyer_ws/src/position_control/scripts/position_control.py\end{verbatim}
+	\item \begin{verbatim}../sawyer_ws/src/position_control/scripts/motion_control.py\end{verbatim}
+	\item \begin{verbatim}../sawyer_ws/src/position_control/scripts/drone_control.py\end{verbatim}
+	\item \begin{verbatim}../sawyer_ws/src/position_control/scripts/drone_sim.py\end{verbatim}
+	\item \begin{verbatim}../sawyer_ws/src/position_control/scripts/drone_sim_joints.py\end{verbatim}
+\end{itemize}
+
+	%\lstinputlisting[language=Python]{../sawyer_ws/src/position_control/scripts/drone_sim_joints.py}
+	
+\end{document}
