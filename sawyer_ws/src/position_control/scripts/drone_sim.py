@@ -40,8 +40,9 @@ class Drone:
 
         ap = argparse.ArgumentParser()
         ap.add_argument("-c", "--condition", type=str, help="Condition of the environment: calm, average, rough")
-        ap.add_argument("-r", "--randomize", action='store_true', help="Randomly generate trajectory, overrides condition (true/false)")
-        ap.add_argument("-b", "--box", action='store_true', help="Test box edges at progam startup (true/false)")
+        ap.add_argument("-r", "--randomize", action='store_true', help="Randomly generate trajectory, overrides condition")
+        ap.add_argument("-b", "--box", action='store_true', help="Test box edges at progam startup")
+        ap.add_argument("-l", "--line", action='store_true', help="Move in straight line to test Doppler effect")
         ap.add_argument("--reset", action='store_true', help="Reset the arm to it's beginning position")
         self.args = vars(ap.parse_args())
         
@@ -51,6 +52,8 @@ class Drone:
             self.args["randomize"] = False
         if not self.args["box"]:
             self.args["box"] = False
+        if not self.args["line"]:
+            self.args["line"] = False
     
         outargs = dict(zip(self.args.keys(), self.args.values()))
         print('')
@@ -126,8 +129,22 @@ class Drone:
         success = self.move(wait=True, point_list=point_list, MAX_LIN_SPD=0.5, MAX_LIN_ACCL=0.75)
         return success
 
+    def follow_line(self):
+        print("I am moving in a line")
+
+        point_list = list()
+
+        point = [0.0, 0.4, 0.0, 0.0, 0.0, 0.0]
+        point_list.append(point)
+
+        point = [0.0, -0.4, 0.0, 0.0, 0.0, 0.0]
+        point_list.append(point)
+
+        success = self.move(wait=True, point_list=point_list, MAX_LIN_SPD=1.0, MAX_LIN_ACCL=20.0)
+        return success
+
     def moveToNeutral(self):
-        print("\n --- Returning to neutral position (0.65, 0.0, 0.5, 0.0, 0.0, 0.0 ---")
+        print("\n --- Returning to neutral position (0.65, 0.0, 0.4, 0.0, 0.0, 0.0 ---")
         point = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         point_list = [point]
 
@@ -154,7 +171,7 @@ class Drone:
         wpt_opts = MotionWaypointOptions(max_linear_speed=MAX_LIN_SPD, max_linear_accel=MAX_LIN_ACCL, corner_distance=0.002)
         
         for point in point_list:
-            q_base = quaternion_from_euler(0, math.pi/2, 0)
+            q_base = quaternion_from_euler(0, 0, math.pi/2)
             #q_rot = quaternion_from_euler(math.radians(point[3]), math.radians(point[4]), math.radians(point[5]))
             q_rot = quaternion_from_euler(point[3], point[4], point[5])
             q = quaternion_multiply(q_rot, q_base)
@@ -202,6 +219,11 @@ class Drone:
         if self.args["box"]:
             self.trace_box()
             self.moveToNeutral()
+
+        if self.args["line"]:
+            self.follow_line()
+            self.moveToNeutral()
+            return
 
         #self.sim_drone()
         self.move(wait=True, point_list=[[-0.011,0.046,0.015,-0.53,0.023,-6.5e06],[-0.012, 0.04, 0.014, -0.53, 0.022, -6.2e-06], [0.0, 0.0, 0.0, 0, 0, 0]])
