@@ -33,10 +33,15 @@ class EEControl:
 
     def run(self):
         self.limb.move_to_joint_positions(positions=self.neutral, timeout=15.0)
-        maxAccel = 1.5  #m/s**2
-        looptime = .01
 
-        maxSpeed = 0.75
+        looptime = .01
+        
+        dx       = 0.1   # m (distance available to slow down)
+        maxSpeed = 0.5  # m/s
+        maxAccel = maxSpeed**2/(2*dx)  # m/s**2
+        
+        x_des = 0.65    # desired x position
+        kP = 1.0        # proportional coefficient for P controller 
 
         rate = rospy.Rate(1/looptime)
 
@@ -57,9 +62,13 @@ class EEControl:
         while not rospy.is_shutdown():
 
             ee_pos = self.limb.endpoint_pose()
-            #x = ee_pos['position'][0]
+            x = ee_pos['position'][0]
             y = ee_pos['position'][1]
             #z = ee_pos['position'][2]
+
+            x_error = x_des - x
+            velocity[0][0] = x_error * kP       # update x vel to keep ee_x_pos at desired position
+
 
             if self._state == "STOP":
                 velocity = stop
