@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "/home/cthornton/.platformio/penv/bin/python"
+    "python.pythonPath": "/home/cthornton/.platformio/penv/bin/python",
+    "cmake.configureOnOpen": false
 }

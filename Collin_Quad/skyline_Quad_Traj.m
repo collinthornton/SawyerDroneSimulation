@@ -7,11 +7,12 @@ Tsd = 0.001;
 
 wind = [2 -1 0];
 
-maxVel = [8, 8];
+maxVel = [6, 6];
 
 % sigma = 0*[1.06 1.06 0.7];
- sigma = 1.0*[1.06 1.06 0];
-
+ sigma = 2.0*[1.06 1.06 0];
+% Trial one: maxVel [8, 8] sigma = 1.0*[1.06, 1.06, 0.7]
+% Trial two: maxVel [6, 6] sigma = 2.0*[1.06, 1.06, 0.7]
 wind_and_Max_Vel = abs([0, crosswind, maxVel]);
 
 
